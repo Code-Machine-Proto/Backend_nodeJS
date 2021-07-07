@@ -1,0 +1,4 @@
+# Paths should be changed according to the host running the NodeJS server
+Set-Location -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel"
+sbt "test:runMain accProcNoJumpHexCode"
+Copy-Item -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel\output_files\hex_program.txt" -Destination "C:\Users\Andy\Documents\CodeMachine\Backend_nodeJS\output_files"
