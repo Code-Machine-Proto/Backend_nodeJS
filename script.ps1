@@ -1,7 +1,0 @@
-Set-Location -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel"
-sbt "test:runMain accProcNoJumpTester"
-Copy-Item -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel\output_files\acc_status.txt" -Destination "C:\Users\Andy\Desktop\backend_cm\output_files"
-Copy-Item -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel\output_files\internal_memory_status.txt" -Destination "C:\Users\Andy\Desktop\backend_cm\output_files"
-Copy-Item -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel\output_files\ir_status.txt" -Destination "C:\Users\Andy\Desktop\backend_cm\output_files"
-Copy-Item -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel\output_files\pc_status.txt" -Destination "C:\Users\Andy\Desktop\backend_cm\output_files"
-Copy-Item -Path "C:\Users\Andy\Documents\CodeMachine\accumulator-chisel\output_files\state_status.txt" -Destination "C:\Users\Andy\Desktop\backend_cm\output_files"
