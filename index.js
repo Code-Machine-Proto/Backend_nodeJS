@@ -3,9 +3,9 @@ const app = express();
 app.use(express.json());
 const port = 8000;
 const { exec } = require('child_process');
-
-
+const readline = require('readline');
 var fs = require('fs');
+const { readEachLine } = require('./helpers');
 
 function replaceCurrentProgram(body){
     fs.writeFileSync('currentProgram.txt', '', function (error) {
@@ -101,17 +101,31 @@ app.post('/run_simulation', (req, res) => {
 
     try {
         // script.ps1 executes sbt commands and copy result files into nodejs working repository
-        exec('./scripts/run_simulation.ps1', { 'shell': 'powershell.exe' }, (error, stdout, stderr) => {
+        exec('./scripts/run_simulation.ps1', { 'shell': 'powershell.exe' },async (error, stdout, stderr) => {
             if (stdout.includes("error")) {
+                console.log('🚀 ~ exec ~ stderr', stderr);
+                console.log('🚀 ~ exec ~ error', error);
                 console.log("ERREUR")
             } else {
                 console.log("SUCCES")
                 try {
-                    responseArray[0] = fs.readFileSync('output_files/acc_status.txt', 'utf8').toString().split("\n");
-                    responseArray[1] = fs.readFileSync('output_files/internal_memory_status.txt', 'utf8').toString().split("\n");
-                    responseArray[2] = fs.readFileSync('output_files/ir_status.txt', 'utf8').toString().split("\n");
-                    responseArray[3] = fs.readFileSync('output_files/pc_status.txt', 'utf8').toString().split("\n");
-                    responseArray[4] = fs.readFileSync('output_files/state_status.txt', 'utf8').toString().split("\n");
+                    const acc = await readEachLine('output_files/acc_status.txt');
+                    const memory = await readEachLine('output_files/internal_memory_status.txt');
+                    const ir = await readEachLine('output_files/ir_status.txt');
+                    pc = await readEachLine('output_files/pc_status.txt');
+                    state = await readEachLine('output_files/state_status.txt');
+
+                    for (let i in acc) {
+                        responseArray.push(
+                            {
+                                "ir_status": ir[i],
+                                "pc_status": pc[i],
+                                "memory": memory[i].split(","),
+                                "state_status": state[i],
+                                "acc_status": acc[i],
+                                "step": i
+                            })
+                        }
                 } catch (e) {
                     console.log('Error:', e.stack);
                 }
