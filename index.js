@@ -14,7 +14,7 @@ const mongodbUri = process.env.MONGO_URI
 
 
 mongoose.connect(mongodbUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(res => {
-    console.log("mongodb is connected and strong")
+    console.log("mongodb is connected")
 })
 
 const store = new MongoDBSession({
