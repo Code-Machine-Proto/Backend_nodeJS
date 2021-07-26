@@ -12,7 +12,7 @@ const { readEachLine } = require('./helpers');
 const mongodbUri = "mongodb+srv://fandua:mael2015@cluster0.ugkrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
 mongoose.connect(mongodbUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(res => {
-    console.log("mongodb is connected")
+    console.log("mongodb is connected and strong")
 })
 
 const store = new MongoDBSession({
