@@ -5,7 +5,7 @@ const MongoDBSession = require('connect-mongodb-session')(session)
 const mongoose = require('mongoose')
 const app = express();
 app.use(express.json());
-const port = 8000;
+const port = process.env.PORT;
 const { exec } = require('child_process');
 const readline = require('readline');
 var fs = require('fs');
