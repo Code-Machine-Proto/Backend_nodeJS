@@ -1,4 +1,5 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const session = require('express-session')
 const MongoDBSession = require('connect-mongodb-session')(session)
 const mongoose = require('mongoose')
@@ -9,7 +10,7 @@ const { exec } = require('child_process');
 const readline = require('readline');
 var fs = require('fs');
 const { readEachLine } = require('./helpers');
-const mongodbUri = "mongodb+srv://fandua:mael2015@cluster0.ugkrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const mongodbUri = process.env.MONGO_URI
 
 mongoose.connect(mongodbUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(res => {
     console.log("mongodb is connected and strong")
