@@ -1,5 +1,5 @@
+require('dotenv').config()
 const express = require('express');
-const dotenv = require('dotenv');
 const session = require('express-session')
 const MongoDBSession = require('connect-mongodb-session')(session)
 const mongoose = require('mongoose')
@@ -11,6 +11,7 @@ const readline = require('readline');
 var fs = require('fs');
 const { readEachLine } = require('./helpers');
 const mongodbUri = process.env.MONGO_URI
+
 
 mongoose.connect(mongodbUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(res => {
     console.log("mongodb is connected and strong")
