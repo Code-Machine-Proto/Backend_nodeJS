@@ -1,4 +1,7 @@
 const express = require('express');
+const session = require('express-session')
+const MongoDBSession = require('connect-mongodb-session')(session)
+const mongoose = require('mongoose')
 const app = express();
 app.use(express.json());
 const port = 8000;
@@ -6,6 +9,25 @@ const { exec } = require('child_process');
 const readline = require('readline');
 var fs = require('fs');
 const { readEachLine } = require('./helpers');
+const mongodbUri = "mongodb+srv://fandua:mael2015@cluster0.ugkrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+
+mongoose.connect(mongodbUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(res => {
+    console.log("mongodb is connected")
+})
+
+const store = new MongoDBSession({
+    uri: mongodbUri,
+    collection: 'mySessions'
+});
+
+app.use(session({
+    secret: 'key that will sign cookie',
+    resave: false,
+    saveUninitialized: false,
+    store: store
+}))
+
+
 
 function replaceCurrentProgram(body){
     fs.writeFileSync('currentProgram.txt', '', function (error) {
@@ -22,6 +44,17 @@ function replaceCurrentProgram(body){
         });
     }
 }
+
+app.post('/login', (req, res) => {
+    console.log('🚀 ~ app.post ~ req', req.body);
+    if (req.body.username === 'test' && req.body.password === 'test') {
+        res.send({ connected: true })
+        req.session.isAuth = true
+    } else {
+        res.send({connected: false})
+        req.session.isAuth = false
+    }
+})
 
 app.post('/compile', (req, res) => {
     replaceCurrentProgram(req.body);

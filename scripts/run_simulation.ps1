@@ -1,8 +1,0 @@
-Copy-Item -Path "D:\work\Backend\Backend_nodeJS\currentProgram.txt" -Destination "D:\work\Backend\chisel-cm\programs"
-Set-Location -Path "D:\work\Backend\chisel-cm"
-sbt "test:runMain accProcNoJumpCompileAndRun"
-Copy-Item -Path "D:\work\Backend\chisel-cm\output_files\acc_status.txt" -Destination "D:\work\Backend\Backend_nodeJS\output_files"
-Copy-Item -Path "D:\work\Backend\chisel-cm\output_files\internal_memory_status.txt" -Destination "D:\work\Backend\Backend_nodeJS\output_files"
-Copy-Item -Path "D:\work\Backend\chisel-cm\output_files\ir_status.txt" -Destination "D:\work\Backend\Backend_nodeJS\output_files"
-Copy-Item -Path "D:\work\Backend\chisel-cm\output_files\pc_status.txt" -Destination "D:\work\Backend\Backend_nodeJS\output_files"
-Copy-Item -Path "D:\work\Backend\chisel-cm\output_files\state_status.txt" -Destination "D:\work\Backend\Backend_nodeJS\output_files"
