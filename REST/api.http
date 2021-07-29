@@ -1,0 +1,4 @@
+### Variables
+
+### Test Base API
+GET  http://localhost:8000 

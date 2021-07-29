@@ -1,0 +1,8 @@
+### Variables
+@user = { "username": "test", "password": "test"}
+
+### Register user given their email and password, returns the token upon successful registration
+POST  http://localhost:8000/api/user
+content-type: application/json
+
+{{user}}
