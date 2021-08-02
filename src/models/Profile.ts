@@ -26,7 +26,7 @@ const profileSchema: Schema = new Schema({
   }],
   answers: [{
     type: Schema.Types.ObjectId,
-    ref: "answers",
+    ref: "Answer",
   }],
 
 });

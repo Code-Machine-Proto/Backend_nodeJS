@@ -9,10 +9,15 @@ import auth from "../../middleware/auth";
 import Payload from "../../types/Payload";
 import Request from "../../types/Request";
 import User, { IUser } from "../../models/User";
+import Course from "../../models/Course";
+import { ICourse } from "../../models/Course";
+import { uuid } from 'uuidv4';
+import Problem from '../../models/Problem';
+import Profile, { IProfile } from "../../models/Profile";
 
 const router: Router = Router();
 
-// @route   GET api/auth
+// @route   GET api/course
 // @desc    Get authenticated user given the token
 // @access  Private
 router.get("/", auth, async (req: Request, res: Response) => {
@@ -25,14 +30,13 @@ router.get("/", auth, async (req: Request, res: Response) => {
   }
 });
 
-// @route   POST api/auth
-// @desc    Login user and get token
+// @route   POST api/course/create
+// @desc    Create a new course
 // @access  Public
 router.post(
-  "/",
+  "/create",
   [
-    check("email", "Please include a valid email").isEmail(),
-    check("password", "Missing_Password").exists()
+    check("name", "Please include a name").exists(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -42,45 +46,58 @@ router.post(
         .json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { name, problems }: ICourse = req.body;
     try {
-      let user: IUser = await User.findOne({ email });
 
-      if (!user) {
-        return res.status(HttpStatusCodes.BAD_REQUEST).json({
-          errors: [
-            {
-              msg: "Invalid_Credentials"
-            }
-          ]
-        });
-      }
+      const newCourse = await Course.create({ name, problems});
+      console.log("🚀 ~ file: course.ts ~ line 52 ~ newCourse", newCourse)
+      await Problem.updateMany({ '_id': newCourse.problems }, { $push: { courses: newCourse._id } });
 
-      const isMatch = await bcrypt.compare(password, user.password);
+    } catch (err) {
+      console.error(err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
+    }
+  }
+);
 
-      if (!isMatch) {
-        return res.status(HttpStatusCodes.BAD_REQUEST).json({
-          errors: [
-            {
-              msg: "Invalid_Credentials"
-            }
-          ]
-        });
-      }
+// @route   POST api/course/assign
+// @desc    Create a new course
+// @access  Public
+router.post(
+  "/assign",
+  [  auth,
+    check("courses", "Please include a list of courses").exists(),
+  ],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(HttpStatusCodes.BAD_REQUEST)
+        .json({ errors: errors.array() });
+    }
 
-      const payload: Payload = {
-        userId: user.id
-      };
+    const profile: IProfile = await Profile.findOne({ user: req.userId });
 
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: config.get("jwtExpiration") },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+    if (!profile) {
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({
+        errors: [
+          {
+            msg: "User not registered",
+          },
+        ],
+      });
+    }
+
+    profile.courses.push(courses)
+    await profile.save()
+
+    const { name, problems }: ICourse = req.body;
+    try {
+
+      const newCourse = await Course.create({ name, problems});
+      console.log("🚀 ~ file: course.ts ~ line 52 ~ newCourse", newCourse)
+      await Problem.updateMany({ '_id': newCourse.problems }, { $push: { courses: newCourse._id } });
+
     } catch (err) {
       console.error(err.message);
       res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");

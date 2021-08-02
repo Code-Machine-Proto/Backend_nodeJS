@@ -14,7 +14,6 @@ import { ICourse } from "./Course";
 export interface IProblem extends Document {
   title: string;
   type: string;
-  id: Schema.Types.ObjectId;
   processor: string;
   question: string;
   courses: [ICourse["_id"]];
@@ -22,10 +21,7 @@ export interface IProblem extends Document {
 }
 
 const problemSchema: Schema = new Schema({
-  id: {
-    type: Schema.Types.ObjectId,
-    unique: true
-  },
+
   title: {
     type: String,
     unique: true,

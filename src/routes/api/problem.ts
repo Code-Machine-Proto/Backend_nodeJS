@@ -9,6 +9,10 @@ import auth from "../../middleware/auth";
 import Payload from "../../types/Payload";
 import Request from "../../types/Request";
 import User, { IUser } from "../../models/User";
+import Problem from "../../models/Problem";
+import { uuid } from "uuidv4";
+import { IProblem } from './../../models/Problem';
+import Course from "../../models/Course";
 
 const router: Router = Router();
 
@@ -25,14 +29,19 @@ router.get("/", auth, async (req: Request, res: Response) => {
   }
 });
 
-// @route   POST api/auth
-// @desc    Login user and get token
+
+// @route   POST api/problem/create
+// @desc    Create a new problem
 // @access  Public
 router.post(
-  "/",
+  "/create",
   [
-    check("email", "Please include a valid email").isEmail(),
-    check("password", "Password is required").exists()
+    check("title", "Title is required").exists(),
+    check("type", "Type is required").exists(),
+    check("question", "Question is required").exists(),
+    check("courses", "Courses is required").exists(),
+    check("answers", "Answers is required").exists(),
+    check("processor", "Processor is required").exists(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -42,45 +51,15 @@ router.post(
         .json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { title, type, question, processor, courses, answers }:IProblem = req.body;
+
+    const ProblemData = {
+      title, type, question, processor, courses, answers
+    }
     try {
-      let user: IUser = await User.findOne({ email });
+      const newProblem = await Problem.create(ProblemData);
+      await Course.updateMany({ '_id': newProblem.courses }, { $push: { problems: newProblem._id } });
 
-      if (!user) {
-        return res.status(HttpStatusCodes.BAD_REQUEST).json({
-          errors: [
-            {
-              msg: "Invalid Credentials"
-            }
-          ]
-        });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (!isMatch) {
-        return res.status(HttpStatusCodes.BAD_REQUEST).json({
-          errors: [
-            {
-              msg: "Invalid Credentials"
-            }
-          ]
-        });
-      }
-
-      const payload: Payload = {
-        userId: user.id
-      };
-
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: config.get("jwtExpiration") },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
     } catch (err) {
       console.error(err.message);
       res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");

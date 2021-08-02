@@ -8,6 +8,8 @@ import profile from "./routes/api/profile";
 
 import { ConnectionOptions, connect } from "mongoose";
 import accumulator from "./routes/api/accumulator";
+import course from "./routes/api/course";
+import problem from "./routes/api/problem";
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.get("/", (_req, res) => {
 
 app.use("/api/auth", auth);
 app.use("/api/user", user);
+app.use("/api/problem", problem);
+app.use("/api/course", course);
 app.use("/api/profile", profile);
 app.use("/api/compile", accumulator);
 
