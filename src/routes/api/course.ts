@@ -65,7 +65,7 @@ router.post(
 // @access  Public
 router.post(
   "/assign",
-  [  auth,
+  [  
     check("courses", "Please include a list of courses").exists(),
   ],
   async (req: Request, res: Response) => {
@@ -75,10 +75,11 @@ router.post(
         .status(HttpStatusCodes.BAD_REQUEST)
         .json({ errors: errors.array() });
     }
+    const { courses }: IUser = req.body;
 
-    const profile: IProfile = await Profile.findOne({ user: req.userId });
+    const user: IUser = await User.findOne({ _id: req.body.userId });
 
-    if (!profile) {
+    if (!user) {
       return res.status(HttpStatusCodes.BAD_REQUEST).json({
         errors: [
           {
@@ -88,15 +89,9 @@ router.post(
       });
     }
 
-    profile.courses.push(courses)
-    await profile.save()
-
-    const { name, problems }: ICourse = req.body;
     try {
-
-      const newCourse = await Course.create({ name, problems});
-      console.log("🚀 ~ file: course.ts ~ line 52 ~ newCourse", newCourse)
-      await Problem.updateMany({ '_id': newCourse.problems }, { $push: { courses: newCourse._id } });
+      user.courses.push(courses);
+      await user.save()
 
     } catch (err) {
       console.error(err.message);

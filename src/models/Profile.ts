@@ -11,24 +11,13 @@ import { IUser } from "./User";
  */
 export interface IProfile extends Document {
   user: IUser["_id"];
-  courses: [ICourse["_id"]];
-  answers: [IAnswer["_id"]];
 }
 
 const profileSchema: Schema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User"
-  },
-  courses: [{
-    type: Schema.Types.ObjectId,
-    ref: "Course",
-  }],
-  answers: [{
-    type: Schema.Types.ObjectId,
-    ref: "Answer",
-  }],
-
+  }
 });
 
 const Profile: Model<IProfile> = model("Profile", profileSchema);

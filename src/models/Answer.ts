@@ -11,7 +11,8 @@ import { IUser } from "./User";
 export interface IAnswer extends Document {
   user: IUser["_id"];
   problem: IProblem["_id"];
-  content: string;
+  published: Date;
+  content: string[];
 }
 
 const answerSchema: Schema = new Schema({
@@ -22,6 +23,10 @@ const answerSchema: Schema = new Schema({
   problem: {
     type: Schema.Types.ObjectId,
     ref: "Problem"
+  },
+  published: {
+    type: Date,
+    default: Date.now
   },
   content: [{
     type: String,

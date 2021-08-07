@@ -1,5 +1,5 @@
 ### Variables
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1Y2Q2ODMxZjFhY2I0ZjBiNjkxYzRlZjYiLCJpYXQiOjE1NTc1NjIxNDMsImV4cCI6MTU1NzkyMjE0M30.BP7n27AVY9MKTz1ViHMJWOVqQGMktJmT8AJWrZuQoP0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 @profile = { "firstName": "John", "lastName": "Doe", "username": "john.doe" }
 @userId = 5cd6831f1acb4f0b691c4ef6
 

@@ -7,6 +7,7 @@ import config from "config";
 import Payload from "../../types/Payload";
 import Request from "../../types/Request";
 import User, { IUser } from "../../models/User";
+import auth from "../../middleware/auth";
 
 const router: Router = Router();
 
@@ -77,17 +78,17 @@ router.post(
   }
 );
 
-// // @route   GET api/user
-// // @desc    Get all users
-// // @access  Public
-// router.get("/", async (_req: Request, res: Response) => {
-//   try {
-//     const profiles = await Profile.find().populate("user", ["avatar", "username"]);
-//     res.json(profiles);
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
-//   }
-// });
+// @route   GET api/user
+// @desc    Get all users
+// @access  Public
+router.get("/",[auth], async (req: Request, res: Response) => {
+  try {
+    const user = await User.findOne({ "_id": req.userId }).populate({ path: "courses", populate: "problems" }).populate("answers");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+  }
+});
 
 export default router;

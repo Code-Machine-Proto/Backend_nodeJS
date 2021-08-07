@@ -14,7 +14,7 @@ import { ICourse } from "./Course";
 export interface IProblem extends Document {
   title: string;
   type: string;
-  processor: string;
+  processor: number;
   question: string;
   courses: [ICourse["_id"]];
   answers?: [string];
@@ -28,7 +28,7 @@ const problemSchema: Schema = new Schema({
     required: true
   },
   processor: {
-    type: String,
+    type: Number,
     required: true
   },
   type: {

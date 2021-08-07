@@ -10,6 +10,7 @@ import { ConnectionOptions, connect } from "mongoose";
 import accumulator from "./routes/api/accumulator";
 import course from "./routes/api/course";
 import problem from "./routes/api/problem";
+import answer from "./routes/api/answer";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/auth", auth);
+app.use("/api/answer", answer);
 app.use("/api/user", user);
 app.use("/api/problem", problem);
 app.use("/api/course", course);
