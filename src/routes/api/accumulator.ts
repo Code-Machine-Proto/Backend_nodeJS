@@ -48,14 +48,18 @@ router.post(
           body: JSON.stringify(req.body)
         });
 
+        const content = await response.json()
       //add the new answer
       if (req.body.problemId) {
-        const answer: IAnswer = await Answer.create({ user: req.userId, problem: req.body.problemId, content: req.body.program })
-        user.answers.push(answer)
-        user.save()
+
+        const oldAnswer: IAnswer = await Answer.findOne({ user: req.userId, problem: req.body.problemId, content: req.body.program })
+        if (!oldAnswer) { 
+          const answer: IAnswer = await Answer.create({ user: req.userId, problem: req.body.problemId, content: req.body.program })
+          user.answers.push(answer)
+          user.save()
+        }
       }
       
-      const content = await response.json()
       
       res.json(content)
     } catch (err) {
