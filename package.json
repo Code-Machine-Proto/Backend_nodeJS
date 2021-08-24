@@ -7,10 +7,10 @@
   "scripts": {
     "tsc": "tsc",
     "watch-tsc": "tsc -w",
-    "deploy": "node dist/src/server.js",
+    "deploy": "tsc && node dist/src/server.js",
     "watch-deploy": "nodemon dist/src/server.js",
-    "dev": "concurrently \"npm run watch-tsc\" \"npm run watch-deploy\"",
-    "start": "npm run deploy",
+    "dev": "concurrently \"yarn watch-tsc\" \"yarn watch-deploy\"",
+    "start": "yarn deploy",
     "heroku-postbuild": "npm run tsc"
   },
   "dependencies": {

@@ -18,7 +18,7 @@ const app = express();
 connectDB();
 
 // Express configuration
-app.set("port", process.env.PORT || 8000);
+app.set("port", process.env.PORT || 6000);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
