@@ -11,6 +11,7 @@ import accumulator from "./routes/api/accumulator";
 import course from "./routes/api/course";
 import problem from "./routes/api/problem";
 import answer from "./routes/api/answer";
+import cors from 'cors';
 
 const app = express();
 
@@ -18,10 +19,10 @@ const app = express();
 connectDB();
 
 // Express configuration
-app.set("port", process.env.PORT || 6000);
+app.set("port", process.env.PORT || 8081);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cors());
 // @route   GET /
 // @desc    Test Base API
 // @access  Public

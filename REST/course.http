@@ -1,8 +1,8 @@
 ### Variables
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGZmOGM4NGMwOGVjNjkyZGM0NmNlZmMiLCJpYXQiOjE2Mjc5NjMxMjcsImV4cCI6MTYyODMyMzEyN30.gJ93wisRC6xAbJXbn6T40RxACksuJSA2ThFS8KNWBVA
-@course = { "name": "INF2045", "problems": ["51bb793aca2ab77a3200000d"] }
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTI5MzUzMzQ1MzJiNTY2ODA5NmIzZDIiLCJpYXQiOjE2MzAwOTQ4NTcsImV4cCI6MTYzMDQ1NDg1N30.a9DtmnKhlY9YpktKK7RGEJGUWWOvxbyNq_H7dB4pgXc
+@course = { "name": "INF1600", "problems": ["51bb793aca2ab77a3200000d"] }
 
-@courses = {"courses": "61072b46eeaac73f602e04b9", "userId": "60ff8c84c08ec692dc46cefc"}
+@courses = {"courses": "61072b46eeaac73f602e04b9", "userId": "612935334532b5668096b3d2"}
 
 ### Get authenticated user given the token
 GET  http://localhost:8000/api/course/create
@@ -15,7 +15,7 @@ content-type: application/json
 {{course}}
 
 ### Assign a new course to the user
-POST  http://localhost:8000/api/course/assign
+POST  http://localhost:8081/api/course/assign
 content-type: application/json
 x-auth-token: {{token}}
 

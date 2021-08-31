@@ -9,20 +9,40 @@ import Course, { ICourse } from "./Course";
  * @param lastConnection:date
  */
 export interface IUser extends Document {
+  email: string;
+  matricule: number;
   username: string;
   password: string;
+  firstname: string;
+  lastname: string;
   lastConnection: Date;
   courses: [ICourse["_id"]];
   answers: [IAnswer["_id"]];
 }
 
 const userSchema: Schema = new Schema({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true
   },
+  matricule: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  username: {
+    type: String,
+  },
   password: {
+    type: String,
+    required: true
+  },
+  lastname: {
+    type: String,
+    required: true
+  },
+  firstname: {
     type: String,
     required: true
   },

@@ -1,10 +1,10 @@
 ### Variables
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 
-@user = { "username": "test", "password": "test"}
+@user = { "email": "admin@codemachine.com","matricule": "3334444", "password": "test", "firstname": "admin", "lastname": "admin"}
 
 ### Register user given their email and password, returns the token upon successful registration
-POST  http://localhost:8000/api/user
+POST  http://localhost:8081/api/user/add
 content-type: application/json
 
 {{user}}

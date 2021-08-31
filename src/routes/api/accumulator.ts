@@ -39,7 +39,7 @@ router.post(
           ],
         });
       }
-      const response = await fetch("http://codemachine.fnduister.com:8080/compileAndRun",
+      const response = await fetch("http://localhost:8080/compileAndRun",
         {
           method: 'POST',
           headers: {
