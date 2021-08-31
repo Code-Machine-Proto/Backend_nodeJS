@@ -39,7 +39,7 @@ router.post(
           ],
         });
       }
-      const response = await fetch(`${process.env.NODE_ENV !== 'production' ? "http://localhost:8081/" : "http://codemachine.fnduister.com:8081/"}compileAndRun`,
+      const response = await fetch(`${process.env.NODE_ENV !== 'production' ? "http://localhost:8080/" : "http://codemachine.fnduister.com:8080/"}compileAndRun`,
         {
           method: 'POST',
           headers: {
