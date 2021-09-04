@@ -39,16 +39,7 @@ router.post(
           ],
         });
       }
-      const response = await fetch(`http://codemachine.fnduister.com:8080/compileAndRun`,
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json;charset=utf-8'
-          },
-          body: JSON.stringify(req.body)
-        });
 
-        const content = await response.json()
       //add the new answer
       if (req.body.problemId) {
 
@@ -61,7 +52,7 @@ router.post(
       }
       
       
-      res.json(content)
+      res.json({hasError: false})
     } catch (err) {
       console.error(err.message);
       res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
