@@ -128,7 +128,7 @@ router.post(
         { expiresIn: config.get("jwtExpiration") },
         (err, token) => {
           if (err) throw err;
-          res.json({hasErrors: false, payload: token });
+          res.json({ hasErrors: false, payload: { token, role: user.role } });
         }
       );
     } catch (err) {

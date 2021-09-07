@@ -19,6 +19,7 @@ router.post(
   [
     check("firstname", "Please include a valid firstname").isLength({ min: 3 }),
     check("lastname", "Please include a valid lastname").isLength({ min: 3 }),
+    check("role", "Please include a valid role").isLength({ min: 3 }),
     check("email", "Please include a valid email").normalizeEmail().isEmail(),
     check(
       "matricule",
@@ -32,9 +33,9 @@ router.post(
         .status(HttpStatusCodes.BAD_REQUEST)
         .json({ errors: errors.array() });
     }
-    const { lastname, email, matricule, firstname } = req.body;
+    const { lastname, email, matricule, firstname, role } = req.body;
 
-    let user: IUser = await User.findOne({ email, matricule });
+    let user: IUser = await User.findOne({ email ,role , matricule });
     console.log('🚀 ~ user', user);
 
     if (user) {
@@ -53,7 +54,7 @@ router.post(
     const hashed = await bcrypt.hash("password", salt);
     
     try {
-      await User.create({ lastname, email, matricule, firstname, password: hashed, courses: ["61072b46eeaac73f602e04b9"] })
+      await User.create({ lastname, email, matricule, role, firstname, password: hashed, courses: ["61072b46eeaac73f602e04b9"] })
       res.json({ hasErrors: false})
     } catch (err) {
       console.error(err.message);
@@ -199,6 +200,7 @@ router.post(
           matricule: user.matricule,
           email: user.email,
           password: hashed,
+          role: "STUDENT",
           courses: ["61072b46eeaac73f602e04b9"]
         };
         bulk.insert(userFields);
@@ -240,7 +242,7 @@ router.get("/",[auth], async (req: Request, res: Response) => {
 // @access  Public
 router.post("/reset",[auth], async (req: Request, res: Response) => {
   try {
-    const user = await User.deleteMany({ matricule: { $nin: [3334444] } });
+    const user = await User.deleteMany({ role: { $nin: ["ADMIN", "TEACHER"] } });
     res.json(user);
   } catch (err) {
     console.error(err.message);

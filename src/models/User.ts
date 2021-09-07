@@ -15,6 +15,7 @@ export interface IUser extends Document {
   password: string;
   firstname: string;
   lastname: string;
+  role: string;
   lastConnection: Date;
   courses: [ICourse["_id"]];
   answers: [IAnswer["_id"]];
@@ -41,6 +42,11 @@ const userSchema: Schema = new Schema({
   lastname: {
     type: String,
     required: true
+  },
+  role: {
+    type: String,
+    required: true,
+    default: "STUDENT"
   },
   firstname: {
     type: String,
