@@ -16,7 +16,7 @@ const router: Router = Router();
 // @access  Private
 router.post("/changePassword",
   check("matricule", "Invalid_Username").isLength({ min: 6, max: 12 }),
-  check("newPassword", "Invalid_Password").isLength({ min: 4, max: 12 })
+  check("newPassword", "Invalid_Password").isLength({ min: 6, max: 30 })
 , async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
