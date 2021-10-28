@@ -18,6 +18,7 @@ export interface IProblem extends Document {
   question: string;
   courses: [ICourse["_id"]];
   answers?: [string];
+  isAdmin: boolean;
 }
 
 const problemSchema: Schema = new Schema({
@@ -34,7 +35,7 @@ const problemSchema: Schema = new Schema({
   type: {
     type: String,
     required: true
-  
+
   },
   question: {
     type: String,
@@ -46,6 +47,10 @@ const problemSchema: Schema = new Schema({
   }],
   answers: {
     type: [String]
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 });
 

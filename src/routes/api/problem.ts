@@ -51,10 +51,10 @@ router.post(
         .json({ errors: errors.array() });
     }
 
-    const { title, type, question, processor, courses, answers }:IProblem = req.body;
+    const { title, type, question, processor, courses, answers, isAdmin }:IProblem = req.body;
 
     const ProblemData = {
-      title, type, question, processor, courses, answers
+      title, type, question, processor, courses, answers, isAdmin
     }
     try {
       const newProblem = await Problem.create(ProblemData);
