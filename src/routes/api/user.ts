@@ -35,7 +35,7 @@ router.post(
     }
     const { lastname, email, matricule, firstname, role } = req.body;
 
-    let user: IUser = await User.findOne({ email ,role , matricule });
+    let user: IUser = await User.findOne({ email, role, matricule });
     console.log('🚀 ~ user', user);
 
     if (user) {
@@ -52,13 +52,13 @@ router.post(
 
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash("password", salt);
-    
+
     try {
       await User.create({ lastname, email, matricule, role, firstname, password: hashed, courses: ["61072b46eeaac73f602e04b9"] })
-      res.json({ hasErrors: false})
+      res.json({ hasErrors: false })
     } catch (err) {
       console.error(err.message);
-      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: "+ err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
     }
   }
 );
@@ -100,12 +100,12 @@ router.post(
 
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
-    
+
     try {
-      await User.updateOne({email}, {$set: {password: hashed, username}})
+      await User.updateOne({ email }, { $set: { password: hashed, username } })
     } catch (err) {
       console.error(err.message);
-      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: "+ err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
     }
   }
 );
@@ -116,7 +116,7 @@ router.post(
 router.post(
   "/",
   [
-    check("username", "Please include a valid username").isLength({min: 3}),
+    check("username", "Please include a valid username").isLength({ min: 3 }),
     check(
       "password",
       "Please enter a password with 6 or more characters"
@@ -181,7 +181,7 @@ router.post(
 // @desc    register multiple users
 // @access  Public
 router.post(
-  "/bulkSignup",auth,
+  "/bulkSignup", auth,
   async (req: Request, res: Response) => {
 
     const { users } = req.body;
@@ -192,7 +192,7 @@ router.post(
       const hashed = await bcrypt.hash("password", salt);
 
       for (const user of users) {
-        
+
         // Build user object based on IUser
         const userFields = {
           firstname: user.firstname,
@@ -207,14 +207,14 @@ router.post(
       }
 
 
-        bulk.execute(function (err, result) {
-          if (err) {
-            console.log('🚀 ~ err', err);
-            throw err
-          } else {
-            res.json("success")
-          }
-        });
+      bulk.execute(function (err, result) {
+        if (err) {
+          console.log('🚀 ~ err', err);
+          throw err
+        } else {
+          res.json("success")
+        }
+      });
 
     } catch (err) {
       console.error(err.message);
@@ -223,12 +223,41 @@ router.post(
   }
 );
 
+// @route   POST api/user/bulkAddCourse
+// @desc    Create a new course to all users
+// @access  Public
+router.post(
+  "/bulkAddCourse",
+  [
+    check("courseId", "Please include a course id").exists(),
+  ],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(HttpStatusCodes.BAD_REQUEST)
+        .json({ errors: errors.array() });
+    }
+    const { users, courseId } = req.body;
+
+    try {
+      await User.updateMany({ 'matricule': users }, { $push: { courses: courseId } });
+      res.json({ hasErrors: false });
+    } catch (err) {
+      console.error(err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
+    }
+  }
+);
+
 // @route   GET api/user
 // @desc    Get user's infos
 // @access  Public
-router.get("/",[auth], async (req: Request, res: Response) => {
+router.get("/", [auth], async (req: Request, res: Response) => {
   try {
-    const user = await User.findOne({ "_id": req.userId }).populate({ path: "courses", populate: "problems" }).populate("answers");
+    const user = await User.findOne({ "_id": req.userId })
+      .populate({ path: "courses", populate: { path: "processors", populate: { path: "problems" } } })
+      .populate("answers");
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -240,7 +269,7 @@ router.get("/",[auth], async (req: Request, res: Response) => {
 // @route   POST api/user/reset
 // @desc    POST delete all users
 // @access  Public
-router.post("/reset",[auth], async (req: Request, res: Response) => {
+router.post("/reset", [auth], async (req: Request, res: Response) => {
   try {
     const user = await User.deleteMany({ role: { $nin: ["ADMIN", "TEACHER"] } });
     res.json(user);
@@ -253,7 +282,7 @@ router.post("/reset",[auth], async (req: Request, res: Response) => {
 // @route   GET api/user/all
 // @desc    Get all users
 // @access  Public
-router.get("/all",[auth], async (req: Request, res: Response) => {
+router.get("/all", [auth], async (req: Request, res: Response) => {
   try {
     const users = await User.find({ username: { $nin: ["admin", "test", "default"] } });
     res.json(users);
@@ -268,7 +297,7 @@ router.get("/all",[auth], async (req: Request, res: Response) => {
 // @access  Public
 router.post("/remove",
   [auth,
-  check("matricules", "Please include valid matricules").isArray({ min: 1 }),
+    check("matricules", "Please include valid matricules").isArray({ min: 1 }),
   ], async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -277,13 +306,13 @@ router.post("/remove",
         .json({ hasErrors: true, errors: errors.array() });
     }
     console.log('🚀 ~ ], ~ req.body.matricules', req.body.matricules);
-  try {
-    await User.deleteMany({ matricule: { $in: req.body.matricules } });
-    res.json({hasErrors: false});
-  } catch (err) {
-    console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
-  }
-});
+    try {
+      await User.deleteMany({ matricule: { $in: req.body.matricules } });
+      res.json({ hasErrors: false });
+    } catch (err) {
+      console.error(err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
+    }
+  });
 
 export default router;

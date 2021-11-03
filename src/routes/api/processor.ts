@@ -15,16 +15,19 @@ import { uuid } from 'uuidv4';
 import Problem from '../../models/Problem';
 import Profile, { IProfile } from "../../models/Profile";
 import Processor from "../../models/Processor";
+import { IProcessor } from "../../models/Processor";
 
 const router: Router = Router();
 
-// @route   POST api/course/create
+
+// @route   POST api/processor/create
 // @desc    Create a new course
 // @access  Public
 router.post(
   "/create",
   [
     check("name", "Please include a name").exists(),
+    check("type", "Please include a type").exists(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -34,12 +37,11 @@ router.post(
         .json({ errors: errors.array() });
     }
 
-    const { name, processors }: ICourse = req.body;
+    const { name, problems, type }: IProcessor = req.body;
     try {
 
-      const newCourse = await Course.create({ name, processors });
-      console.log("🚀 ~ file: course.ts ~ line 52 ~ newCourse", newCourse)
-      await Processor.updateMany({ '_id': newCourse.processors }, { $push: { courses: newCourse._id } });
+      const newProcessor = await Processor.create({ type, name, problems });
+      await Problem.updateMany({ '_id': newProcessor.problems }, { $push: { processors: newProcessor._id } });
       res.json({ hasErrors: false });
     } catch (err) {
       console.error(err.message);
@@ -48,8 +50,8 @@ router.post(
   }
 );
 
-// @route   POST api/course/assign
-// @desc    Create a new course
+// @route   POST api/processor/assign
+// @desc    Create a new processor
 // @access  Public
 router.post(
   "/assign",

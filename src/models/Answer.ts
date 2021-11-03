@@ -13,6 +13,7 @@ export interface IAnswer extends Document {
   problem: IProblem["_id"];
   published: Date;
   content: string[];
+  compiledResult?: string;
 }
 
 const answerSchema: Schema = new Schema({
@@ -30,7 +31,10 @@ const answerSchema: Schema = new Schema({
   },
   content: [{
     type: String,
-  }]
+  }],
+  compiledResult: {
+    type: String
+  }
 });
 
 const Answer: Model<IAnswer> = model("Answer", answerSchema);

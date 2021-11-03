@@ -3,11 +3,11 @@ import { Document, Model, model, Schema } from "mongoose";
 /**
  * Interface to model the User Schema for TypeScript.
  * @param email:string
- * @param problems:[objectId]
+ * @param processors:[objectId]
  */
 export interface ICourse extends Document {
   name: string;
-  problems: [Schema.Types.ObjectId];
+  processors: [Schema.Types.ObjectId];
 }
 
 const courseSchema: Schema = new Schema({
@@ -16,9 +16,9 @@ const courseSchema: Schema = new Schema({
     required: true,
     unique: true
   },
-  problems: [{
+  processors: [{
     type: Schema.Types.ObjectId,
-    ref: "Problem"
+    ref: "Processor"
   }]
 });
 

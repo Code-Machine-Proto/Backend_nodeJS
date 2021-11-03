@@ -1,6 +1,6 @@
 ### Variables
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1Y2Q2ODMxZjFhY2I0ZjBiNjkxYzRlZjYiLCJpYXQiOjE1NTc1NjIxNDMsImV4cCI6MTU1NzkyMjE0M30.BP7n27AVY9MKTz1ViHMJWOVqQGMktJmT8AJWrZuQoP0
-@problem = { "question":"what is the best processor","title": "Processor PolyRisc","courses": ["61072b46eeaac73f602e04b9"], "type": "qcm", "answers": ["yes", "maybe"], "processor": "2" }
+@problem = { "question":"browse","title": "explore_processor","processors": ["61072b46eeaac73f602e04b9"], "type": "qcm", "answers": ["yes", "maybe"], "processor": "2" }
 
 ### Get authenticated user given the token
 GET  http://localhost:8000/api/course/create

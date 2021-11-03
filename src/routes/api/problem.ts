@@ -12,22 +12,9 @@ import User, { IUser } from "../../models/User";
 import Problem from "../../models/Problem";
 import { uuid } from "uuidv4";
 import { IProblem } from './../../models/Problem';
-import Course from "../../models/Course";
+import Processor from "../../models/Processor";
 
 const router: Router = Router();
-
-// @route   GET api/auth
-// @desc    Get authenticated user given the token
-// @access  Private
-router.get("/", auth, async (req: Request, res: Response) => {
-  try {
-    const user: IUser = await User.findById(req.userId).select("-password");
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
-  }
-});
 
 
 // @route   POST api/problem/create
@@ -39,9 +26,8 @@ router.post(
     check("title", "Title is required").exists(),
     check("type", "Type is required").exists(),
     check("question", "Question is required").exists(),
-    check("courses", "Courses is required").exists(),
+    check("processors", "Processor is required").exists(),
     check("answers", "Answers is required").exists(),
-    check("processor", "Processor is required").exists(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -51,14 +37,16 @@ router.post(
         .json({ errors: errors.array() });
     }
 
-    const { title, type, question, processor, courses, answers, isAdmin }:IProblem = req.body;
+    const { title, type, question, processors, answers, isAdmin }: IProblem = req.body;
 
     const ProblemData = {
-      title, type, question, processor, courses, answers, isAdmin
+      title, type, question, processors, answers, isAdmin
     }
+
     try {
       const newProblem = await Problem.create(ProblemData);
-      await Course.updateMany({ '_id': newProblem.courses }, { $push: { problems: newProblem._id } });
+      await Processor.updateMany({ '_id': newProblem.processors }, { $push: { problems: newProblem._id } });
+      res.json({ hasErrors: false });
 
     } catch (err) {
       console.error(err.message);

@@ -20,39 +20,41 @@ const router: Router = Router();
 router.post(
   "/",
   [
-    auth,
     check("problemId", "Please include the problem Id").exists(),
     check("program", "Please include the answer content").exists(),
     check("processorId", "Please include the processor Id").exists(),
   ],
   async (req: Request, res: Response) => {
+    console.log('🚀 ~ req', req);
+    console.log('🚀 ~ req', req);
+    console.log('🚀 ~ req', req);
     try {
 
-      const user: IUser = await User.findOne({ _id: req.userId });
+      // const user: IUser = await User.findOne({ _id: req.userId });
 
-      if (!user) {
-        return res.status(HttpStatusCodes.BAD_REQUEST).json({
-          errors: [
-            {
-              msg: "User not registered",
-            },
-          ],
-        });
-      }
+      // if (!user) {
+      //   return res.status(HttpStatusCodes.BAD_REQUEST).json({
+      //     errors: [
+      //       {
+      //         msg: "User not registered",
+      //       },
+      //     ],
+      //   });
+      // }
 
       //add the new answer
       if (req.body.problemId) {
-
+        console.log("yeah", req.body.compiledResult)
         const oldAnswer: IAnswer = await Answer.findOne({ user: req.userId, problem: req.body.problemId, content: req.body.program })
-        if (!oldAnswer) { 
-          const answer: IAnswer = await Answer.create({ user: req.userId, problem: req.body.problemId, content: req.body.program })
-          user.answers.push(answer)
-          user.save()
+        if (!oldAnswer) {
+          const answer: IAnswer = await Answer.create({ user: req.userId, problem: req.body.problemId, content: req.body.program, compiledResult: req.body.compiledResult })
+          // user.answers.push(answer)
+          // user.save()
         }
       }
-      
-      
-      res.json({hasError: false})
+
+
+      res.json({ hasError: false })
     } catch (err) {
       console.error(err.message);
       res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");

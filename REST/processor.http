@@ -1,22 +1,22 @@
 ### Variables
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTI5MzUzMzQ1MzJiNTY2ODA5NmIzZDIiLCJpYXQiOjE2MzAwOTQ4NTcsImV4cCI6MTYzMDQ1NDg1N30.a9DtmnKhlY9YpktKK7RGEJGUWWOvxbyNq_H7dB4pgXc
-@course = { "name": "INF1600", "processors": ["6182297f0c342600538010e0","618229530c342600538010db","618228340c342600538010d8"] }
+@processor = { "name": "processor_polyrisc", "problems": [], "type": "2" }
 
-@courses = {"courses": "61072b46eeaac73f602e04b9", "userId": "612935334532b5668096b3d2"}
+@processors = {"courses": "61072b46eeaac73f602e04b9", "userId": "612935334532b5668096b3d2"}
 
 ### Get authenticated user given the token
-GET  http://localhost:8000/api/course/create
+GET  http://localhost:8000/api/processor/create
 x-auth-token: {{token}}
 
 ### Login user and get token
-POST  http://localhost:8081/api/course/create
+POST  http://localhost:8081/api/processor/create
 content-type: application/json
 
-{{course}}
+{{processor}}
 
 ### Assign a new course to the user
-POST  http://localhost:8081/api/course/assign
+POST  http://localhost:8081/api/processor/assign
 content-type: application/json
 x-auth-token: {{token}}
 
-{{courses}}
+{{processors}}

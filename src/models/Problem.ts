@@ -1,5 +1,6 @@
 import { Document, Model, model, Schema } from "mongoose";
 import { ICourse } from "./Course";
+import { IProcessor } from "./Processor";
 
 /**
  * Interface to model the User Schema for TypeScript.
@@ -14,9 +15,8 @@ import { ICourse } from "./Course";
 export interface IProblem extends Document {
   title: string;
   type: string;
-  processor: number;
   question: string;
-  courses: [ICourse["_id"]];
+  processors: [IProcessor["_id"]];
   answers?: [string];
   isAdmin: boolean;
 }
@@ -25,11 +25,6 @@ const problemSchema: Schema = new Schema({
 
   title: {
     type: String,
-    unique: true,
-    required: true
-  },
-  processor: {
-    type: Number,
     required: true
   },
   type: {
@@ -41,9 +36,9 @@ const problemSchema: Schema = new Schema({
     type: String,
     required: true
   },
-  courses: [{
+  processors: [{
     type: Schema.Types.ObjectId,
-    ref: "Course"
+    ref: "Processor"
   }],
   answers: {
     type: [String]
