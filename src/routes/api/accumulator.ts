@@ -18,7 +18,7 @@ const router: Router = Router();
 // @desc    Register user given their username and password, returns the token upon successful registration
 // @access  Public
 router.post(
-  "/",
+  "/", auth,
   [
     check("problemId", "Please include the problem Id").exists(),
     check("program", "Please include the answer content").exists(),
@@ -30,17 +30,17 @@ router.post(
     console.log('🚀 ~ req', req);
     try {
 
-      // const user: IUser = await User.findOne({ _id: req.userId });
+      const user: IUser = await User.findOne({ _id: req.userId });
 
-      // if (!user) {
-      //   return res.status(HttpStatusCodes.BAD_REQUEST).json({
-      //     errors: [
-      //       {
-      //         msg: "User not registered",
-      //       },
-      //     ],
-      //   });
-      // }
+      if (!user) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({
+          errors: [
+            {
+              msg: "User not registered",
+            },
+          ],
+        });
+      }
 
       //add the new answer
       if (req.body.problemId) {
@@ -48,8 +48,8 @@ router.post(
         const oldAnswer: IAnswer = await Answer.findOne({ user: req.userId, problem: req.body.problemId, content: req.body.program })
         if (!oldAnswer) {
           const answer: IAnswer = await Answer.create({ user: req.userId, problem: req.body.problemId, content: req.body.program, compiledResult: req.body.compiledResult })
-          // user.answers.push(answer)
-          // user.save()
+          user.answers.push(answer)
+          user.save()
         }
       }
 
