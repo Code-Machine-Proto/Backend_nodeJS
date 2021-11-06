@@ -26,7 +26,7 @@ router.post(
     check("title", "Title is required").exists(),
     check("type", "Type is required").exists(),
     check("question", "Question is required").exists(),
-    check("processors", "Processor is required").exists(),
+    check("processor", "Processor is required").exists(),
     check("answers", "Answers is required").exists(),
   ],
   async (req: Request, res: Response) => {
@@ -37,15 +37,15 @@ router.post(
         .json({ errors: errors.array() });
     }
 
-    const { title, type, question, processors, answers, isAdmin }: IProblem = req.body;
+    const { title, type, question, processor, answers, isAdmin }: IProblem = req.body;
 
     const ProblemData = {
-      title, type, question, processors, answers, isAdmin
+      title, type, question, processor, answers, isAdmin
     }
 
     try {
       const newProblem = await Problem.create(ProblemData);
-      await Processor.updateMany({ '_id': newProblem.processors }, { $push: { problems: newProblem._id } });
+      await Processor.updateOne({ '_id': newProblem.processor }, { $push: { problems: newProblem._id } });
       res.json({ hasErrors: false });
 
     } catch (err) {

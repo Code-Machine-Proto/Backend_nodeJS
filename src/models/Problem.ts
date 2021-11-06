@@ -1,5 +1,4 @@
 import { Document, Model, model, Schema } from "mongoose";
-import { ICourse } from "./Course";
 import { IProcessor } from "./Processor";
 
 /**
@@ -16,7 +15,7 @@ export interface IProblem extends Document {
   title: string;
   type: string;
   question: string;
-  processors: [IProcessor["_id"]];
+  processor: IProcessor["_id"];
   answers?: [string];
   isAdmin: boolean;
 }
@@ -30,16 +29,15 @@ const problemSchema: Schema = new Schema({
   type: {
     type: String,
     required: true
-
   },
   question: {
     type: String,
     required: true
   },
-  processors: [{
+  processor: {
     type: Schema.Types.ObjectId,
     ref: "Processor"
-  }],
+  },
   answers: {
     type: [String]
   },

@@ -25,14 +25,16 @@ router.post(
     check("processorId", "Please include the processor Id").exists(),
   ],
   async (req: Request, res: Response) => {
-    console.log('🚀 ~ req', req);
-    console.log('🚀 ~ req', req);
-    console.log('🚀 ~ req', req);
+
+    console.log('🚀 ~ req9988 4455');
+
     try {
 
       const user: IUser = await User.findOne({ _id: req.userId });
 
+      console.log('🚀 ~ req.userId first', req.userId);
       if (!user) {
+        console.log("user not registered")
         return res.status(HttpStatusCodes.BAD_REQUEST).json({
           errors: [
             {
@@ -41,22 +43,23 @@ router.post(
           ],
         });
       }
+      console.log('🚀 ~ req.userId second', req.userId);
 
-      //add the new answer
       if (req.body.problemId) {
-        console.log("yeah", req.body.compiledResult)
+        console.log("yeah i'm inside")
         const oldAnswer: IAnswer = await Answer.findOne({ user: req.userId, problem: req.body.problemId, content: req.body.program })
         if (!oldAnswer) {
+          console.log("yeah i'm doubly inside")
           const answer: IAnswer = await Answer.create({ user: req.userId, problem: req.body.problemId, content: req.body.program, compiledResult: req.body.compiledResult })
           user.answers.push(answer)
           user.save()
         }
       }
 
-
       res.json({ hasError: false })
     } catch (err) {
-      console.error(err.message);
+      // console.error(err.message[0]);
+      console.log("something went wrong: ", err.message)
       res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
     }
   }
