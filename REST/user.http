@@ -1,7 +1,5 @@
 ### Variables
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-
-@user = { "email": "admin@codemachine.com","matricule": "3334444", "password": "test", "firstname": "admin", "lastname": "admin"}
+@user = { "email": "fandua@polymtl.ca","matricule": "1914377", "password": "mael2015", "firstname": "admin", "lastname": "admin", "role": "ADMIN"}
 
 ### Register user given their email and password, returns the token upon successful registration
 POST  http://localhost:8081/api/user/add

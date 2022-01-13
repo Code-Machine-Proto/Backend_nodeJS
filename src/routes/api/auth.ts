@@ -17,47 +17,47 @@ const router: Router = Router();
 router.post("/changePassword",
   check("matricule", "Invalid_Username").isLength({ min: 6, max: 12 }),
   check("newPassword", "Invalid_Password").isLength({ min: 6, max: 30 })
-, async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res
-      .status(HttpStatusCodes.BAD_REQUEST)
-      .json({ hasErrors: true, errors: errors.array() });
-  }
+  , async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(HttpStatusCodes.BAD_REQUEST)
+        .json({ hasErrors: true, errors: errors.array() });
+    }
 
-  const {matricule, newPassword} = req.body
+    const { matricule, newPassword } = req.body
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(newPassword, salt);
+    try {
+      const salt = await bcrypt.genSalt(12);
+      const hashed = await bcrypt.hash(newPassword, salt);
 
-    await User.updateOne({matricule}, { password: hashed });
-    res.json({ hasErrors: false });
-  } catch (err) {
-    console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
-  }
+      await User.updateOne({ matricule }, { password: hashed });
+      res.json({ hasErrors: false });
+    } catch (err) {
+      console.error(err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
+    }
   });
 
 // @route   GET api/isUnique
 // @desc    Get authenticated user given the token
 // @access  Private
 router.post("/isUnique", check("matricule", "Invalid_Username").isLength({ min: 6, max: 8 })
-, async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res
-      .status(HttpStatusCodes.BAD_REQUEST)
-      .json({ hasErrors: true, errors: errors.array() });
-  }
-  try {
-    const user: IUser = await User.findOne({matricule: req.body.matricule}).select("-password");
-    res.json({ hasErrors: false, payload: user });
-  } catch (err) {
-    console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
-  }
-});
+  , async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(HttpStatusCodes.BAD_REQUEST)
+        .json({ hasErrors: true, errors: errors.array() });
+    }
+    try {
+      const user: IUser = await User.findOne({ matricule: req.body.matricule }).select("-password");
+      res.json({ hasErrors: false, payload: user });
+    } catch (err) {
+      console.error(err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server_Error");
+    }
+  });
 
 // @route   GET api/auth
 // @desc    Get authenticated user given the token
@@ -78,7 +78,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
 router.post(
   "/",
   [
-    check("matricule", "Invalid_Username").isLength({min: 6, max: 8}),
+    check("matricule", "Invalid_Username").isLength({ min: 6, max: 8 }),
     check("password", "Missing_Password").exists()
   ],
   async (req: Request, res: Response) => {
@@ -90,8 +90,10 @@ router.post(
     }
 
     const { matricule, password } = req.body;
+    console.log('🚀 ~ password', password);
     try {
       let user: IUser = await User.findOne({ matricule });
+      console.log('🚀 ~ user', user);
 
       if (!user) {
         return res.status(HttpStatusCodes.BAD_REQUEST).json({
@@ -104,7 +106,8 @@ router.post(
         });
       }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, 'user.password');
+      console.log('🚀 ~ isMatch', isMatch);
 
       if (!isMatch) {
         return res.status(HttpStatusCodes.BAD_REQUEST).json({

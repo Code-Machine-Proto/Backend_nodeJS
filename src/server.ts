@@ -5,6 +5,7 @@ import connectDB from "../config/database";
 import auth from "./routes/api/auth";
 import user from "./routes/api/user";
 import profile from "./routes/api/profile";
+import config from "config";
 
 import { ConnectionOptions, connect } from "mongoose";
 import accumulator from "./routes/api/accumulator";
@@ -20,7 +21,7 @@ const app = express();
 connectDB();
 
 // Express configuration
-app.set("port", process.env.PORT || 8081);
+app.set("port", config.get("port"));
 app.use(express.json({ limit: '150mb' }));
 app.use(express.urlencoded({ limit: '150mb', extended: true, parameterLimit: 50000 }));
 app.use(cors());

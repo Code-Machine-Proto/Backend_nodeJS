@@ -50,7 +50,7 @@ router.post(
       });
     }
 
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(config.get("salt_round"));
     const hashed = await bcrypt.hash("password", salt);
 
     try {
