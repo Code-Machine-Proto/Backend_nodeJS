@@ -1,7 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://fandua:mael2015@cluster0.ugkrw.mongodb.net/Dev?retryWrites=true&w=majority",
-  "jwtSecret": "thisIsTheSecretToken",
-  "test": "hello world",
-  "port": 3088,
-  "salt_round": 12
-}
