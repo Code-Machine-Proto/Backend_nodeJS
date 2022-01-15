@@ -108,3 +108,5 @@ config/local.json
 /scripts
 
 /out
+
+config/local.json

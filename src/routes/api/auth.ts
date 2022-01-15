@@ -106,7 +106,7 @@ router.post(
         });
       }
 
-      const isMatch = await bcrypt.compare(password, 'user.password');
+      const isMatch = await bcrypt.compare(password, user.password);
       console.log('🚀 ~ isMatch', isMatch);
 
       if (!isMatch) {
