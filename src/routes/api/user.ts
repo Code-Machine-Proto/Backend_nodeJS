@@ -201,7 +201,7 @@ router.post(
           email: user.email,
           password: hashed,
           role: "STUDENT",
-          courses: ["61072b46eeaac73f602e04b9"]
+          courses: ["61822f5adb3db400572083a3"]
         };
         bulk.insert(userFields);
       }
