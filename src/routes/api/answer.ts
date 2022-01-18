@@ -10,6 +10,21 @@ import Answer, { IAnswer } from './../../models/Answer';
 
 const router: Router = Router();
 
+// @route   DELETE api/answer/<problemId>
+// @desc    Get all answers from one problem
+// @access  Private
+router.delete("/all", async (req: Request, res: Response) => {
+  try {
+    await Answer.deleteMany({ "user.role": { $nin: ["TEACHER", "ADMIN"] } })
+    res.json({ "response": "ok" })
+  } catch (err) {
+    console.error(err.message);
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+  }
+});
+
+
+
 // @route   GET api/answer/<problemId>
 // @desc    Get all answers from one problem
 // @access  Private
