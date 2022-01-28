@@ -16,6 +16,7 @@ const router: Router = Router();
 router.delete("/all", async (req: Request, res: Response) => {
   try {
     await Answer.deleteMany({ "user.role": { $nin: ["TEACHER", "ADMIN"] } })
+    console.log("deleted")
     res.json({ "response": "ok" })
   } catch (err) {
     console.error(err.message);

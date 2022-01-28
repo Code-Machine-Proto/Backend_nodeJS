@@ -8,6 +8,7 @@ import Payload from "../../types/Payload";
 import Request from "../../types/Request";
 import User, { IUser } from "../../models/User";
 import auth from "../../middleware/auth";
+import Course from "../../models/Course";
 
 const router: Router = Router();
 
@@ -54,7 +55,9 @@ router.post(
     const hashed = await bcrypt.hash("password", salt);
 
     try {
-      await User.create({ lastname, email, matricule, role, firstname, password: hashed, courses: ["61072b46eeaac73f602e04b9"] })
+      const course = await Course.findOne({ name: "INF1600" });
+      console.log('🚀 ~ course', course);
+      await User.create({ lastname, email, matricule, role, firstname, password: hashed, courses: [course.id] })
       res.json({ hasErrors: false })
     } catch (err) {
       console.error(err.message);
