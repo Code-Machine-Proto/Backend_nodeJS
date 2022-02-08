@@ -1,5 +1,5 @@
 {
-  "mongoURI": "mongodb+srv://fandua:mael2015@cluster0.ugkrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "mongoURI": "mongodb://fandua:mael2015@144.217.80.111:27019/codemachine?authSource=prod&authMechanism=SCRAM-SHA-256&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false",
   "jwtSecret": "thisIsTheSecretToken",
   "jwtExpiration": 360000,
   "port": 8081,
