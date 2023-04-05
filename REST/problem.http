@@ -1,0 +1,13 @@
+### Variables
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1Y2Q2ODMxZjFhY2I0ZjBiNjkxYzRlZjYiLCJpYXQiOjE1NTc1NjIxNDMsImV4cCI6MTU1NzkyMjE0M30.BP7n27AVY9MKTz1ViHMJWOVqQGMktJmT8AJWrZuQoP0
+@problem = { "question":"browse","title": "explore_processor","processor": "6182297f0c342600538010e0", "type": "qcm", "answers": ["yes", "maybe"]}
+
+### Get authenticated user given the token
+GET  http://localhost:8000/api/course/create
+x-auth-token: {{token}}
+
+### Login user and get token
+POST  http://localhost:8081/api/problem/create
+content-type: application/json
+
+{{problem}}

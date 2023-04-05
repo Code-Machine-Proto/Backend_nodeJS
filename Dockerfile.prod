@@ -1,0 +1,11 @@
+# build environment
+FROM node:16-alpine as build
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY . ./
+
+# start app
+CMD ["yarn", "deploy"]

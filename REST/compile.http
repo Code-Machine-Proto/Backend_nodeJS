@@ -1,0 +1,8 @@
+### Variables
+@processor = { "userId": 4444, "program": ["ld    c", "add             a + 1", "mul   c", "st        d", "    stop", "", "a:   4, 12", "5,", "6,", "7", "b:    5,", "2,", "1", "c:    4", "d:    0", "f: 5"],"processorId":1}
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTM2ZDRhMTA0Y2RhNjAwNTNkNzc3YTgiLCJpYXQiOjE2Mzk1MDMzNTksImV4cCI6MTYzOTg2MzM1OX0.WrB_zX-2P97d9PHRVfF9Y9v8KMlADN3qGCLoBKjqHrg
+### Register user given their email and password, returns the token upon successful registration
+POST  http://localhost:8080/compileAndRun
+content-type: application/json
+
+{{processor}}

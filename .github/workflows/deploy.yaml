@@ -1,0 +1,22 @@
+name: Build & Deploy
+on: 
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy nodejs backend api
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+
+          script: |
+            cd code-machine/Backend_nodeJS
+            git pull
+            cd ../
+            sudo docker-compose up --build -d
+

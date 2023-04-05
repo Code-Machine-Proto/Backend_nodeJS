@@ -1,0 +1,8 @@
+### Variables
+@user = { "email": "test@polymtl.ca","matricule": "1914377", "password": "mael2015", "firstname": "admin", "lastname": "admin", "role": "ADMIN"}
+
+### Register user given their email and password, returns the token upon successful registration
+POST  http://localhost:8081/api/user/add
+content-type: application/json
+
+{{user}}

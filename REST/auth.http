@@ -1,0 +1,13 @@
+### Variables
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGZmOGM4NGMwOGVjNjkyZGM0NmNlZmMiLCJpYXQiOjE2Mjk3ODk5NDAsImV4cCI6MTYzMDE0OTk0MH0.SoqBq8fmyFo5G3RKJ1McmdMQtBlzjWFUXH7XS3jyiJk
+@login = { "username": "default", "password": "inf1600" }
+
+### Get authenticated user given the token
+GET  http://localhost:3088/api/auth
+x-auth-token: {{token}}
+
+### Login user and get token
+POST  http://144.217.80.111:8081/api/auth
+content-type: application/json
+
+{{login}}
