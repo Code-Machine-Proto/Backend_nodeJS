@@ -64,7 +64,10 @@ router.post("/isUnique", check("matricule", "Invalid_Username").isLength({ min: 
 // @access  Private
 router.get("/", auth, async (req: Request, res: Response) => {
   try {
+<<<<<<< HEAD
     console.log("connecting")
+=======
+>>>>>>> 7cb3c7a921702a11c4ba1c427fef12a55afa8562
     const user: IUser = await User.findById(req.userId).select("-password");
     res.json({ hasErrors: false, payload: user });
   } catch (err) {
