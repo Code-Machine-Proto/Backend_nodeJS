@@ -28,12 +28,15 @@ router.post(
     ).isLength({ min: 3, max: 10 })
   ],
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
+
+    const errors = validationResult(req.body);
     if (!errors.isEmpty()) {
+      console.log("🚀 ~ file: user.ts:37 ~ errors:", errors)
       return res
         .status(HttpStatusCodes.BAD_REQUEST)
-        .json({ errors: errors.array() });
+        .send({ errors: errors.array() });
     }
+
     const { lastname, email, matricule, firstname, role } = req.body;
 
     let user: IUser = await User.findOne({ email, role, matricule });
@@ -187,7 +190,8 @@ router.post(
   "/bulkSignup", auth,
   async (req: Request, res: Response) => {
 
-    const { users } = req.body;
+    const users = req.body;
+    console.log("🚀 ~ file: user.ts:194 ~ users:", users)
     try {
       const bulk = User.collection.initializeUnorderedBulkOp();
 
@@ -212,16 +216,18 @@ router.post(
 
       bulk.execute(function (err, result) {
         if (err) {
-          console.log('🚀 ~ err', err);
-          throw err
+          console.log('🚀 ~ err', "something went wrong");
+          // throw err
+          res.json({ hasErrors: true, errors: err.message });;
+
         } else {
-          res.json("success")
+          res.json({ hasErrors: false, payload: "success" })
         }
       });
 
     } catch (err) {
       console.error(err.message);
-      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ hasErrors: true, errors: err.message });;
     }
   }
 );
@@ -239,8 +245,9 @@ router.post(
     if (!errors.isEmpty()) {
       return res
         .status(HttpStatusCodes.BAD_REQUEST)
-        .json({ errors: errors.array() });
+        .json({ hasErrors: true, errors: errors.array() });
     }
+
     const { users, courseId } = req.body;
 
     try {
@@ -261,10 +268,10 @@ router.get("/", [auth], async (req: Request, res: Response) => {
     const user = await User.findOne({ "_id": req.userId })
       .populate({ path: "courses", populate: { path: "processors", populate: { path: "problems" } } })
       .populate("answers");
-    res.json(user);
+    res.json({ hasErrors: false, payload: user});
   } catch (err) {
     console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ hasErrors: true, errors: ["Server Error: " + err.message] });
   }
 });
 
@@ -272,13 +279,14 @@ router.get("/", [auth], async (req: Request, res: Response) => {
 // @route   POST api/user/reset
 // @desc    POST delete all users
 // @access  Public
-router.post("/reset", [auth], async (req: Request, res: Response) => {
+router.post("/reset", async (req: Request, res: Response) => {
   try {
-    const user = await User.deleteMany({ role: { $nin: ["ADMIN", "TEACHER"] } });
-    res.json(user);
+    const response = await User.deleteMany({ role: { $nin: ["ADMIN", "TEACHER"] } });
+    console.log("supposed to remove everything here")
+    res.json({ hasErrors: false });
   } catch (err) {
     console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ hasErrors: true, errors: ["Server Error: " + err.message] });
   }
 });
 
@@ -288,10 +296,10 @@ router.post("/reset", [auth], async (req: Request, res: Response) => {
 router.get("/all", [auth], async (req: Request, res: Response) => {
   try {
     const users = await User.find({ username: { $nin: ["admin", "test", "default"] } });
-    res.json(users);
+    res.json({ hasErrors: false, payload: users });
   } catch (err) {
     console.error(err.message);
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ hasErrors: true, errors: ["Server Error: " + err.message] });
   }
 });
 
@@ -314,7 +322,7 @@ router.post("/remove",
       res.json({ hasErrors: false });
     } catch (err) {
       console.error(err.message);
-      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error: " + err.message);
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ hasErrors: true, errors: ["Server Error: " + err.message] });
     }
   });
 

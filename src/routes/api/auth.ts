@@ -11,7 +11,7 @@ import User, { IUser } from "../../models/User";
 
 const router: Router = Router();
 
-// @route   POST api/changePassword
+// @route   POST api/auth/changePassword
 // @desc    POST authenticated user given the token
 // @access  Private
 router.post("/changePassword",
