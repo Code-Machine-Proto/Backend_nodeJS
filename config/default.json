@@ -2,6 +2,6 @@
   "mongoURI": "mongodb://fandua:mael2015@144.217.80.111:27016/prod?authSource=prod&authMechanism=SCRAM-SHA-256&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false",
   "jwtSecret": "thisIsTheSecretToken",
   "jwtExpiration": 360000,
-  "port": 8081,
+  "port": 3088,
   "salt_round": 10
 }
